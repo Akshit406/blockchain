@@ -1,7 +1,7 @@
 import datetime
 import hashlib
 import json
-from flask import Flask, jsonify
+
 
 class Blockchain:
 
@@ -46,15 +46,10 @@ class Blockchain:
                 return False
             previous_proof = previous_block['proof']
             proof = block['proof']
-            hash_operation = hashlib.sha256(str(proof**2 - previous_proof**2).encode()).hexdigest()
+            hash_operation = hashlib.sha256(str((proof**3 - previous_proof**3) + (proof**2 + previous_proof**2)).encode()).hexdigest()
             if hash_operation[:4] != '0000':
                 return False
             previous_block = block
             block_index += 1
         return True 
     
-# Creating a Flask Web App
-app = Flask(__name__)
-blockchain = Blockchain()
-
-@app.route('/mine_block', methods=['GET'])  
